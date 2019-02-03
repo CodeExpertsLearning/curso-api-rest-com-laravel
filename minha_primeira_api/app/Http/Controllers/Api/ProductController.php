@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Product;
+use App\Repository\ProductRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -20,12 +21,21 @@ class ProductController extends Controller
 	    $this->product = $product;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-    	$products = $this->product->paginate(1);
+    	$products = $this->product;
+	    $productRespository = new ProductRepository($products);
+
+	    if($request->has('coditions')) {
+		    $productRespository->selectCoditions($request->get('coditions'));
+	    }
+
+	    if($request->has('fields')) {
+		    $productRespository->selectFilter($request->get('fields'));
+	    }
 
     	//return response()->json($products);
-	    return new ProductCollection($products);
+	    return new ProductCollection($productRespository->getResult()->paginate(10));
     }
 
 	public function show($id)
