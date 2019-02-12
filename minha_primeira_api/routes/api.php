@@ -33,7 +33,7 @@ Route::namespace('Api')->group(function(){
 	Route::prefix('products')->group(function(){
 		Route::get('/', 'ProductController@index');
 		Route::get('/{id}', 'ProductController@show');
-		Route::post('/', 'ProductController@save')->middleware('auth.basic');
+		Route::post('/', 'ProductController@save');//->middleware('auth.basic');
 		Route::put('/', 'ProductController@update');
 		Route::patch('/', 'ProductController@update');
 		Route::delete('/{id}', 'ProductController@delete');
